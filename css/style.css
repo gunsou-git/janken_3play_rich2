@@ -1,0 +1,392 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    background: radial-gradient(circle at top, #2b3a67, #0f1630);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+}
+
+.title {
+    font-size: 24px;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    color: #ffd75e;
+    text-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ===== テーブル（緑のフェルト＋木の縁） ===== */
+.table {
+    width: 100%;
+    max-width: 560px;
+    background: radial-gradient(ellipse at center, #2f8a4f 0%, #1d5e35 70%, #154528 100%);
+    border: 8px solid #6b4423;
+    border-radius: 40px;
+    padding: 24px 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(0, 0, 0, 0.4);
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+}
+
+.center {
+    text-align: center;
+    margin: 16px 0;
+}
+
+/* 掛け声・結果 */
+.a {
+    font-size: 40px;
+    font-weight: 800;
+    min-height: 56px;
+    text-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ===== プレイヤーのカード ===== */
+.player {
+    width: 150px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    padding: 12px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.player.you {
+    border-color: #7fd3ff;
+}
+
+.avatar {
+    font-size: 32px;
+}
+
+.name {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.hand {
+    font-size: 64px;
+    line-height: 1.2;
+    height: 80px;
+}
+
+.hand-name {
+    font-size: 16px;
+    min-height: 22px;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    min-height: 22px;
+    opacity: 0;
+}
+
+/* 勝ち：金色に光る */
+.player.win {
+    border-color: #ffd75e;
+    background: rgba(255, 215, 94, 0.2);
+    box-shadow: 0 0 24px #ffd75e;
+    transform: scale(1.06);
+}
+.player.win .badge {
+    opacity: 1;
+    background: #ffd75e;
+    color: #4a3300;
+}
+
+/* 負け：暗くなる */
+.player.lose {
+    opacity: 0.55;
+    filter: grayscale(0.6);
+}
+.player.lose .badge {
+    opacity: 1;
+    background: #555;
+    color: #ddd;
+}
+
+/* あいこ */
+.player.draw .badge {
+    opacity: 1;
+    background: #8fb3ff;
+    color: #102050;
+}
+
+/* ===== アニメーション ===== */
+/* じゃん・けん中：手を上下にふる */
+.shake {
+    animation: shake 0.5s ease-in-out infinite;
+}
+@keyframes shake {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%      { transform: translateY(-14px) rotate(-12deg); }
+}
+
+/* ぽん！：手がポンと出る */
+.pop {
+    animation: pop 0.35s ease-out;
+}
+@keyframes pop {
+    0%   { transform: scale(0.3); }
+    70%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+/* ===== 手を選ぶボタン ===== */
+.hands {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.hands button {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    color: #1d2b55;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #b8c2e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+}
+
+.hands button span {
+    font-size: 40px;
+}
+
+.hands button:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #b8c2e0;
+}
+
+.hands button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.score {
+    margin-top: 16px;
+    font-size: 15px;
+    color: #cfd8ff;
+}
+
+/* ===== スマホ向け ===== */
+@media (max-width: 420px) {
+    .player { width: 46%; }
+    .hand { font-size: 48px; height: 64px; }
+    .a { font-size: 30px; }
+    .hands button { width: 88px; height: 88px; }
+}
+
+/* =====================================================
+   ここから追加：ポイント制・決勝・ゲーム終了まわり
+   ===================================================== */
+
+/* ルール */
+.rule {
+    text-align: center;
+    margin-bottom: 14px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #cfd8ff;
+}
+.rule b {
+    color: #ffd75e;
+}
+
+/* 何回戦目か・予選／決勝 */
+.round {
+    display: inline-block;
+    font-size: 14px;
+    padding: 2px 14px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.25);
+    color: #d8f5df;
+}
+.round.final {
+    background: #ff6b6b;
+    color: #fff;
+    font-weight: 800;
+    animation: pop 0.35s ease-out;
+}
+
+/* カードを基準に「+1」を浮かせる */
+.player {
+    position: relative;
+}
+
+/* 決勝で敗退した人：もっと暗く小さく */
+.player.out {
+    opacity: 0.35;
+    filter: grayscale(1);
+    transform: scale(0.94);
+}
+
+/* ポイント表示 */
+.pt {
+    margin-top: 6px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffd75e;
+}
+
+/* 3ポイントまでのゲージ */
+.gauge {
+    height: 8px;
+    margin-top: 4px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.gauge-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ffd75e, #ff9f43);
+    border-radius: 999px;
+    transition: width 0.5s;
+}
+
+/* ふわっと出る +1 */
+.float {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 34px;
+    font-weight: 800;
+    color: #ffd75e;
+    pointer-events: none;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+    animation: floatUp 1.2s ease-out forwards;
+}
+@keyframes floatUp {
+    0%   { opacity: 0; transform: translate(-50%, 10px) scale(0.6); }
+    20%  { opacity: 1; transform: translate(-50%, 0) scale(1.2); }
+    100% { opacity: 0; transform: translate(-50%, -50px) scale(1); }
+}
+
+/* 履歴 */
+.history {
+    width: 100%;
+    max-width: 560px;
+    margin-top: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 10px 16px;
+}
+.history-title {
+    font-size: 13px;
+    color: #9fb0e8;
+    margin-bottom: 4px;
+}
+.log {
+    list-style: none;
+    font-size: 14px;
+    color: #e6ebff;
+    min-height: 20px;
+}
+.log li {
+    padding: 3px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+}
+.log b {
+    color: #ffd75e;
+}
+
+/* 結果画面 */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 10, 30, 0.75);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.overlay.show {
+    display: flex;
+}
+.result {
+    width: 100%;
+    max-width: 360px;
+    background: #fff;
+    color: #1d2b55;
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    animation: pop 0.4s ease-out;
+}
+.result-icon {
+    font-size: 64px;
+}
+.result-title {
+    font-size: 26px;
+    font-weight: 800;
+}
+.result-sub {
+    font-size: 14px;
+    color: #6a7599;
+    margin-bottom: 12px;
+}
+.ranking {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 16px;
+}
+.ranking li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-weight: 800;
+}
+.ranking li.me {
+    background: #e7f5ff;
+}
+.ranking li span {
+    color: #d48a00;
+}
+.retry {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 999px;
+    background: #ffd75e;
+    color: #4a3300;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #c9a12d;
+}
+.retry:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #c9a12d;
+}

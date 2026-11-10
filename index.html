@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>じゃんけん（3人対戦）</title>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h1 class="title">3人対戦じゃんけん</h1>
+
+    <!-- ルール -->
+    <p class="rule">勝者が1人に決まったら <b>+1ポイント</b><br>
+        勝ちが2人なら、その2人で<b>決勝</b>じゃんけん！<br>
+        <b>3ポイント</b>先取で優勝</p>
+
+    <!-- じゃんけんのテーブル -->
+    <div class="table">
+
+        <!-- 上段：相手2人 -->
+        <div class="row">
+            <div class="player c">
+                <div class="avatar">🤖</div>
+                <div class="name">相手1</div>
+                <div class="hand">✊</div>
+                <div class="hand-name">－</div>
+                <div class="badge"></div>
+                <div class="pt">0 pt</div>
+                <div class="gauge"><div class="gauge-bar"></div></div>
+            </div>
+            <div class="player d">
+                <div class="avatar">👾</div>
+                <div class="name">相手2</div>
+                <div class="hand">✊</div>
+                <div class="hand-name">－</div>
+                <div class="badge"></div>
+                <div class="pt">0 pt</div>
+                <div class="gauge"><div class="gauge-bar"></div></div>
+            </div>
+        </div>
+
+        <!-- 真ん中：掛け声と結果 -->
+        <div class="center">
+            <p class="round">第 1 回戦　予選（3人）</p>
+            <p class="a">手を選んでね</p>
+        </div>
+
+        <!-- 下段：あなた -->
+        <div class="row">
+            <div class="player you b">
+                <div class="avatar">😎</div>
+                <div class="name">あなた</div>
+                <div class="hand">✊</div>
+                <div class="hand-name">－</div>
+                <div class="badge"></div>
+                <div class="pt">0 pt</div>
+                <div class="gauge"><div class="gauge-bar"></div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 手を選ぶボタン -->
+    <div class="hands">
+        <button class="aa"><span>✊</span>グー</button>
+        <button class="bb"><span>✌️</span>チョキ</button>
+        <button class="cc"><span>✋</span>パー</button>
+    </div>
+
+    <!-- 対戦の履歴 -->
+    <div class="history">
+        <p class="history-title">履歴</p>
+        <ul class="log"></ul>
+    </div>
+
+    <!-- 結果画面（ゲーム終了時に表示） -->
+    <div class="overlay">
+        <div class="result">
+            <div class="result-icon">🏆</div>
+            <p class="result-title">あなたの優勝！</p>
+            <p class="result-sub"></p>
+            <ol class="ranking"></ol>
+            <button class="retry">もう一度あそぶ</button>
+        </div>
+    </div>
+
+    <!-- 必ずJqueryが先 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="js/test.js"></script>
+</body>
+</html>
